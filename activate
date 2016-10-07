@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# Get directory our script is in
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+
+# Set basename to show the last element of our GOPATH
+BN=$(basename $DIR)
+
+deactivate() {
+    # Reset vars
+    export PS1=$ORIG_PS1
+    export VIRTUAL_GOPATH=false
+    unset GOPATH
+}
+
+activate() {
+    if [ $VIRTUAL_GOPATH == true ]; then
+        echo "Already activated"
+        return
+    fi
+    
+    # Hold our old PS1
+    export ORIG_PS1=$PS1
+
+    # Set our prompt
+    export PS1="($BN) $ORIG_PS1"
+
+    # Set state and GOPATH
+    export VIRTUAL_GOPATH=true
+    export GOPATH=$DIR
+     
+}
+
+activate
